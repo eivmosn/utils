@@ -40,5 +40,3 @@ export function useStorage(option?: Partial<StorageOption>) {
     setStorage,
   }
 }
-
-useStorage()

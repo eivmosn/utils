@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "lib": ["esnext", "DOM", "DOM.Iterable"],
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "esnext",
+    "lib": ["es2023"],
+    "moduleDetection": "force",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "strict": true,
-    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
-    "skipDefaultLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["src"]
 }

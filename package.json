@@ -13,20 +13,17 @@
   "keywords": [],
   "sideEffects": false,
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "typesVersions": {
     "*": {
       "*": [
         "./dist/*",
-        "./dist/index.d.ts"
+        "./dist/index.d.cts"
       ]
     }
   },
@@ -35,20 +32,21 @@
   ],
   "scripts": {
     "test": "vitest",
-    "build": "tsup",
+    "build": "tsdown",
     "dev": "tsx src/index.ts",
     "postinstall": "npx simple-git-hooks",
     "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.0.0",
-    "eslint": "^9.9.1",
-    "nano-staged": "^0.8.0",
-    "simple-git-hooks": "^2.11.1",
-    "tsup": "^8.2.4",
-    "tsx": "^4.19.0",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "@antfu/eslint-config": "^6.7.1",
+    "@types/node": "^25.0.3",
+    "eslint": "^9.39.2",
+    "nano-staged": "^0.9.0",
+    "simple-git-hooks": "^2.13.1",
+    "tsdown": "^0.18.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged"
