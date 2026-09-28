@@ -1,6 +1,6 @@
 import type { Dayjs } from './dayjs'
 import lunisolar from 'lunisolar'
-import festivals from 'lunisolar/markers/festivals.zh-cn'
+import festivals from 'lunisolar/markers/festivals.zh-cn.js'
 import dayjs from './dayjs'
 
 lunisolar.Markers.add(festivals)

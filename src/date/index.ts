@@ -7,6 +7,9 @@ export const DATE_FORMAT = 'YYYY-MM-DD'
 export const TIME_FORMAT = 'HH:mm:ss'
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
 
+export { dayjs }
+export type { Dayjs }
+
 // 非法输入一律返回 null，由各函数转成空值，避免调用方到处 try/catch
 function toDayjs(value?: DateInput): Dayjs | null {
   if (value === null || value === undefined || value === '') {
