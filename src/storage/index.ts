@@ -25,7 +25,7 @@ export function useStorage(option?: Partial<StorageOption>) {
   function setStorage<V>(key: string, value: V) {
     const serializedValue = JSON.stringify({
       value,
-      timestamp: new Date().getTime(),
+      timestamp: Date.now(),
     })
     _setItem(key, serializedValue)
   }
