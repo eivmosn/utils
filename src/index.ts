@@ -10,7 +10,7 @@ export function set<T extends object>(source: T, path: string, value: any) {
   const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.')
   const lastKey = keys.pop()
   const target = keys.reduce((obj, key) => {
-    if (!Object.prototype.hasOwnProperty.call(obj, key))
+    if (!Object.hasOwn(obj, key))
       Object(obj)[key] = {}
     return Object(obj)[key]
   }, source)
@@ -149,7 +149,7 @@ export function uniq<T>(arr: T[], key: keyof T) {
 
 export function merge<T extends object>(target: T, source: Partial<T>): T {
   for (const key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
+    if (Object.hasOwn(source, key)) {
       const value = source[key]
       if (value !== undefined) {
         target[key as keyof T] = value
@@ -158,3 +158,7 @@ export function merge<T extends object>(target: T, source: Partial<T>): T {
   }
   return target
 }
+
+export * from './date'
+export { Calendar } from './date/calendar'
+export type { CalendarDay, CalendarOptions, CalendarQueryOptions, LunarDate, WeekStart } from './date/calendar'
