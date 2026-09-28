@@ -8,4 +8,7 @@ export default defineConfig({
     },
   },
   exports: true,
+  target: 'es2015',
+  clean: true,
+  dts: true,
 })

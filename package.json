@@ -16,8 +16,6 @@
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "typesVersions": {
     "*": {
@@ -37,16 +35,24 @@
     "postinstall": "npx simple-git-hooks",
     "preinstall": "npx only-allow pnpm"
   },
+  "dependencies": {
+    "dayjs": "^1.11.23",
+    "es-toolkit": "^1.52.0",
+    "lunisolar": "^2.6.0"
+  },
   "devDependencies": {
-    "@antfu/eslint-config": "^6.7.1",
-    "@types/node": "^25.0.3",
-    "eslint": "^9.39.2",
+    "@antfu/eslint-config": "^9.5.1",
+    "@types/node": "^25.9.8",
+    "eslint": "^10.11.0",
     "nano-staged": "^0.9.0",
-    "simple-git-hooks": "^2.13.1",
-    "tsdown": "^0.18.1",
-    "tsx": "^4.21.0",
+    "simple-git-hooks": "^2.14.0",
+    "tsdown": "^0.23.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "unplugin-vue": "^7.2.0",
+    "vitest": "^4.1.11",
+    "vue": "^3.5.43",
+    "vue-tsc": "^3.2.0"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged"
