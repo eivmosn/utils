@@ -10,7 +10,7 @@ export function set<T extends object>(source: T, path: string, value: any) {
   const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.')
   const lastKey = keys.pop()
   const target = keys.reduce((obj, key) => {
-    if (!Object.hasOwn(obj, key))
+    if (!Object.hasOwn(Object(obj), key))
       Object(obj)[key] = {}
     return Object(obj)[key]
   }, source)
@@ -157,6 +157,15 @@ export function merge<T extends object>(target: T, source: Partial<T>): T {
     }
   }
   return target
+}
+
+export function toArray<T>(val: T) {
+  if (val === undefined || val === null) {
+    return []
+  }
+  if (Array.isArray(val))
+    return val
+  return [val]
 }
 
 export * from './date'
