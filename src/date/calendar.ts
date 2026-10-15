@@ -5,6 +5,7 @@ import dayjs from './dayjs'
 
 lunisolar.Markers.add(festivals)
 
+/** 农历日期信息 */
 export interface LunarDate {
   year: number // 农历年，可能与公历年不同(公历 1 月常属上一年腊月)
   month: number // 1-12，闰月不出现 102 这类编码值
@@ -16,6 +17,7 @@ export interface LunarDate {
   yearName: string // 如「二〇二四」
 }
 
+/** 日历中的单格数据 */
 export interface CalendarDay {
   fullDate: string // YYYY-MM-DD
   day: number
@@ -31,14 +33,16 @@ export interface CalendarDay {
   solarTerm?: string // 节气名，非节气日为 undefined
 }
 
+/** 每周起始日：0=周日 … 6=周六 */
 export type WeekStart = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
+/** 构造日历的配置 */
 export interface CalendarOptions {
   date?: Dayjs // 默认当前日期
   weekStart?: WeekStart // 默认 0(周日)
 }
 
-// 单次调用可覆盖的配置，date 由实例持有故不含
+/** 单次查询的覆盖配置（不污染实例状态） */
 export interface CalendarQueryOptions {
   weekStart?: WeekStart
 }
@@ -217,26 +221,50 @@ function chunkIntoWeeks(days: CalendarDay[]): CalendarDay[][] {
   return weeks
 }
 
+/**
+ * 日历：生成包含公历、农历、节日、节气的 6×7 月视图
+ *
+ * 链式 API，`prevMonth`/`nextMonth` 等会改变实例当前月份。
+ *
+ * @example
+ * const calendar = new Calendar({ weekStart: 1 })
+ * calendar.getCalendarData()  // CalendarDay[6][7]
+ */
 export class Calendar {
   private currentDate: Dayjs
   private weekStart: WeekStart
 
+  /**
+   * @param options 配置，见 {@link CalendarOptions}
+   */
   constructor(options?: CalendarOptions) {
     this.currentDate = options?.date ? options.date.clone() : dayjs()
     this.weekStart = normalizeWeekStart(options?.weekStart)
   }
 
-  // 0=周日 1=周一 ... 6=周六；非法值回退到 0
+  /**
+   * 设置每周起始日（0=周日 … 6=周六），非法值回退到 0
+   *
+   * @example
+   * calendar.setWeekStart(1)  // 周一为一周起始
+   */
   setWeekStart(weekStart: WeekStart): this {
     this.weekStart = normalizeWeekStart(weekStart)
     return this
   }
 
+  /** 获取当前每周起始日 */
   getWeekStart(): WeekStart {
     return this.weekStart
   }
 
-  // 表头顺序必须由它决定，否则与数据列不对齐；weekStart=1 -> [1,2,3,4,5,6,0]
+  /**
+   * 获取星期表头顺序（由 weekStart 决定）
+   *
+   * @example
+   * new Calendar().getWeekOrder()                       // [0,1,2,3,4,5,6]
+   * new Calendar({ weekStart: 1 }).getWeekOrder()       // [1,2,3,4,5,6,0]
+   */
   getWeekOrder(options?: CalendarQueryOptions): WeekStart[] {
     const weekStart = options?.weekStart === undefined
       ? this.weekStart
@@ -244,7 +272,11 @@ export class Calendar {
     return Array.from({ length: 7 }, (_, i) => ((weekStart + i) % 7) as WeekStart)
   }
 
-  // 返回 6 行 7 列；options 仅覆盖本次调用，不污染实例
+  /**
+   * 获取月视图数据，固定 6 行 7 列
+   *
+   * `options` 仅覆盖本次调用，不改变实例状态。
+   */
   getCalendarData(options?: CalendarQueryOptions): CalendarDay[][] {
     const weekStart = options?.weekStart === undefined
       ? this.weekStart
@@ -268,21 +300,25 @@ export class Calendar {
     return chunkIntoWeeks(days)
   }
 
+  /** 切换到上个月，返回自身以支持链式调用 */
   prevMonth(): this {
     this.currentDate = this.currentDate.subtract(1, 'month')
     return this
   }
 
+  /** 切换到下个月，返回自身以支持链式调用 */
   nextMonth(): this {
     this.currentDate = this.currentDate.add(1, 'month')
     return this
   }
 
+  /** 重置为当前月份，返回自身以支持链式调用 */
   currentMonth(): this {
     this.currentDate = dayjs()
     return this
   }
 
+  /** 获取实例当前的日期（dayjs 对象） */
   getCurrentDate(): Dayjs {
     return this.currentDate
   }
