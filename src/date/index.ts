@@ -107,6 +107,47 @@ export function parseDate(date: DateInput, format?: string): Dayjs | null {
   return parsed.isValid() ? parsed : null
 }
 
+/** 纯日期字符串：`-` 或 `/` 分隔，允许 1~2 位，如 `2026-1-1`、`2026/1/1` */
+const PURE_DATE_PATTERN = /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/
+
+/**
+ * 归一化为 `YYYY-MM-DD`；非法输入返回空字符串
+ *
+ * 与 `formatDate` 的区别：纯日期字符串会额外校验真实性，`2026-2-30`
+ * 不会被 dayjs 静默进位成 `2026-03-02`，而是判为非法返回 `''`。
+ * 带时间 / 时区的字符串、`Date`、时间戳只取日期部分。
+ *
+ * @example
+ * normalizeDate('2026-1-1')   // '2026-01-01'
+ * normalizeDate('2026/1/1')   // '2026-01-01'
+ * normalizeDate('2026-2-30')  // ''
+ * normalizeDate('abc')        // ''
+ */
+export function normalizeDate(date: DateInput): string {
+  const parsed = toDayjs(date)
+  if (!parsed) {
+    return ''
+  }
+
+  if (typeof date === 'string') {
+    const matched = date.match(PURE_DATE_PATTERN)
+    if (matched) {
+      const [, year, month, day] = matched
+      // dayjs 底层是 new Date(y, m - 1, d)，不存在的日期会静默进位，
+      // 逐段比对才能识别出 2026-2-30 这类输入
+      if (
+        parsed.year() !== Number(year)
+        || parsed.month() + 1 !== Number(month)
+        || parsed.date() !== Number(day)
+      ) {
+        return ''
+      }
+    }
+  }
+
+  return parsed.format(DATE_FORMAT)
+}
+
 /**
  * 两个日期相差的自然天数（忽略时分秒）
  *
@@ -122,6 +163,25 @@ export function diffDays(a: DateInput, b: DateInput): number {
     return Number.NaN
   }
   return left.startOf('day').diff(right.startOf('day'), 'day')
+}
+
+/**
+ * 两个日期相差的自然周数（忽略时分秒，不足一周向下取整）
+ *
+ * 需要零头天数用 `diffDays(a, b) % 7`，需要向上取整用 `Math.ceil(diffDays(a, b) / 7)`。
+ * 任一非法输入返回 `NaN`。
+ *
+ * @example
+ * diffWeeks('2024-01-19', '2024-01-05')  // 2
+ * diffWeeks('2024-01-05', '2024-01-01')  // 0
+ */
+export function diffWeeks(a: DateInput, b: DateInput): number {
+  const days = diffDays(a, b)
+  if (Number.isNaN(days)) {
+    return Number.NaN
+  }
+  // `|| 0` 是为了把 -0 归一成 0（反向不足一周时会出现）
+  return Math.trunc(days / 7) || 0
 }
 
 /**

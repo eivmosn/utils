@@ -22,11 +22,11 @@ import { useSearch } from '@eivmosn/utils/vue'
 | --- | --- | --- |
 | 格式化日期 / 时间 | `formatDate` `currentDate` `currentTime` `currentDateTime` | date |
 | 日期加减 | `addDays` `subDays` `addMonths` `subMonths` | date |
-| 算日期间隔 / 年龄 | `diffDays` `age` | date |
+| 算日期间隔 / 年龄 | `diffDays` `diffWeeks` `age` | date |
 | 日期比较 / 区间 / 闰年 / 周末 | `isSameDay` `isSameOrBefore` `isSameOrAfter` `isBetween` `isLeapYear` `isWeekend` | date |
 | 取某天的起止（日 / 月 / 周） | `startOfDay` `endOfDay` `startOfMonth` `endOfMonth` `startOfWeek` `endOfWeek` | date |
 | 周数 / 季度 / 第几天 | `weekOfYear` `isoWeek` `quarterOfYear` `dayOfYear` | date |
-| 解析日期 / 校验日期 | `parseDate` `toDate` `toTimestamp` `isValidDate` | date |
+| 解析日期 / 校验日期 / 归一化 | `parseDate` `normalizeDate` `toDate` `toTimestamp` `isValidDate` | date |
 | 相对时间（"3 天前"） | `fromNow` `toNow` | date |
 | 日历 / 农历 / 节气 / 节日 | `Calendar` | date |
 | 数组按字段模糊搜索 | `searchList` | search |
@@ -101,7 +101,9 @@ import { useSearch } from '@eivmosn/utils/vue'
 | `currentYear()` `currentMonth()` `currentDay()` | 当前年 / 月(1-12) / 日 |
 | `formatDate(date, format?)` | 格式化，非法输入返回 `''` |
 | `parseDate(date, format?)` | 解析为 dayjs，失败返回 `null`；传 `format` 启用严格模式 |
+| `normalizeDate(date)` | 归一化为 `YYYY-MM-DD`；非法、或不存在的日期（如 `2026-2-30`）返回 `''` |
 | `diffDays(a, b)` | 相差自然天数，非法输入 `NaN` |
+| `diffWeeks(a, b)` | 相差自然周数（不足一周向下取整），非法输入 `NaN` |
 | `addDays` `subDays` `addMonths` `subMonths` | 日期加减 |
 | `startOfDay` `endOfDay` `startOfMonth` `endOfMonth` `startOfWeek` `endOfWeek` | 起止时间 |
 | `daysInMonth(date)` | 当月天数 |

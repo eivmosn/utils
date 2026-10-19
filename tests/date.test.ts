@@ -12,6 +12,7 @@ import {
   dayOfYear,
   daysInMonth,
   diffDays,
+  diffWeeks,
   endOfDay,
   endOfMonth,
   endOfWeek,
@@ -28,6 +29,7 @@ import {
   isValidDate,
   isWeekend,
   isYesterday,
+  normalizeDate,
   parseDate,
   quarterOfYear,
   startOfDay,
@@ -91,6 +93,51 @@ describe('diffDays', () => {
     expect(diffDays('2024-01-05', '2024-01-03')).toBe(2)
     expect(diffDays('2024-01-05 23:00', '2024-01-05 01:00')).toBe(0)
     expect(diffDays('abc', '2024-01-05')).toBeNaN()
+  })
+})
+
+describe('normalizeDate', () => {
+  it('补零成 YYYY-MM-DD', () => {
+    expect(normalizeDate('2026-1-1')).toBe('2026-01-01')
+    expect(normalizeDate('2026/1/1')).toBe('2026-01-01')
+    expect(normalizeDate('2026-01-01 9:5:3')).toBe('2026-01-01')
+    expect(normalizeDate(new Date(2026, 0, 1))).toBe('2026-01-01')
+  })
+
+  it('不存在的日期判为非法，不静默进位', () => {
+    expect(normalizeDate('2026-2-30')).toBe('')
+    expect(normalizeDate('2026-13-01')).toBe('')
+    expect(normalizeDate('2026-1-32')).toBe('')
+    expect(normalizeDate('2026-0-0')).toBe('')
+    expect(normalizeDate('2023-2-29')).toBe('')
+  })
+
+  it('真实存在的边界日期照常通过', () => {
+    expect(normalizeDate('2024-2-29')).toBe('2024-02-29')
+    expect(normalizeDate('2023-2-28')).toBe('2023-02-28')
+  })
+
+  it('非法输入返回空串', () => {
+    expect(normalizeDate('abc')).toBe('')
+    expect(normalizeDate(null)).toBe('')
+    expect(normalizeDate('')).toBe('')
+  })
+})
+
+describe('diffWeeks', () => {
+  it('按自然周相减，忽略时分秒', () => {
+    expect(diffWeeks('2024-01-19', '2024-01-05')).toBe(2)
+    expect(diffWeeks('2024-01-05 23:00', '2023-12-29 01:00')).toBe(1)
+  })
+
+  it('不足一周向下取整，反向为 0 而非 -0', () => {
+    expect(diffWeeks('2024-01-05', '2024-01-01')).toBe(0)
+    expect(diffWeeks('2024-01-01', '2024-01-05')).toBe(0)
+  })
+
+  it('非法输入返回 NaN', () => {
+    expect(diffWeeks('abc', '2024-01-05')).toBeNaN()
+    expect(diffWeeks('2024-01-05', null)).toBeNaN()
   })
 })
 
