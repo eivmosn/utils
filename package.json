@@ -1,7 +1,7 @@
 {
   "name": "@eivmosn/utils",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Common util collections for javascript and typescript",
   "author": "eivmosn <eivmosn@163.com>",
   "license": "MIT",
@@ -26,8 +26,8 @@
     "typecheck": "vue-tsc -p tsconfig.test.json --noEmit",
     "build": "tsdown",
     "dev": "tsx src/index.ts",
-    "postinstall": "npx simple-git-hooks",
-    "preinstall": "npx only-allow pnpm"
+    "hooks": "simple-git-hooks",
+    "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
     "vue": "^3.3.0"
