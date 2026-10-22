@@ -135,11 +135,7 @@ export function normalizeDate(date: DateInput): string {
       const [, year, month, day] = matched
       // dayjs 底层是 new Date(y, m - 1, d)，不存在的日期会静默进位，
       // 逐段比对才能识别出 2026-2-30 这类输入
-      if (
-        parsed.year() !== Number(year)
-        || parsed.month() + 1 !== Number(month)
-        || parsed.date() !== Number(day)
-      ) {
+      if (parsed.year() !== Number(year) || parsed.month() + 1 !== Number(month) || parsed.date() !== Number(day)) {
         return ''
       }
     }

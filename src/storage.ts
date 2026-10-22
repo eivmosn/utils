@@ -17,10 +17,7 @@ interface StorageOption {
  * getStorage('token')  // 'abc'
  */
 export function useStorage(option?: Partial<StorageOption>) {
-  const {
-    prefix = '$$',
-    type = 'localStorage',
-  } = option || {}
+  const { prefix = '$$', type = 'localStorage' } = option || {}
 
   function _setItem(key: string, value: string) {
     return type === 'localStorage'
@@ -29,9 +26,7 @@ export function useStorage(option?: Partial<StorageOption>) {
   }
 
   function _getItem(key: string) {
-    return type === 'localStorage'
-      ? localStorage.getItem(`${prefix}${key}`)
-      : sessionStorage.getItem(`${prefix}${key}`)
+    return type === 'localStorage' ? localStorage.getItem(`${prefix}${key}`) : sessionStorage.getItem(`${prefix}${key}`)
   }
 
   /**

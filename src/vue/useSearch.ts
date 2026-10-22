@@ -49,9 +49,13 @@ export function useSearch<T extends Record<string, any>>(
   const controller = new AbortController()
   let debounced: (() => void) | undefined
 
-  watch(computed(() => config.value.debounce ?? 0), (delay) => {
-    debounced = delay > 0 ? debounce(runSearch, delay, { signal: controller.signal }) : undefined
-  }, { immediate: true })
+  watch(
+    computed(() => config.value.debounce ?? 0),
+    delay => {
+      debounced = delay > 0 ? debounce(runSearch, delay, { signal: controller.signal }) : undefined
+    },
+    { immediate: true },
+  )
 
   watch(keyword, () => (debounced ? debounced() : runSearch()))
   onScopeDispose(() => controller.abort())

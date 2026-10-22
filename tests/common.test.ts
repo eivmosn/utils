@@ -141,7 +141,10 @@ describe('toTree / flattenList / findNode', () => {
   })
 
   it('父节点不存在时该节点被丢弃', () => {
-    const flat = [{ id: 1, pid: null }, { id: 2, pid: 99 }]
+    const flat = [
+      { id: 1, pid: null },
+      { id: 2, pid: 99 },
+    ]
     const tree = toTree(flat, options) as any[]
     expect(tree).toHaveLength(1)
     expect(tree[0].children).toHaveLength(0)
@@ -186,8 +189,7 @@ describe('getUrlParams', () => {
   })
 
   it('boolean: true 时把 true/false（忽略大小写）转成布尔，其余保持字符串', () => {
-    expect(getUrlParams('?on=true&off=false&x=1', { boolean: true }))
-      .toEqual({ on: true, off: false, x: '1' })
+    expect(getUrlParams('?on=true&off=false&x=1', { boolean: true })).toEqual({ on: true, off: false, x: '1' })
     expect(getUrlParams('?a=TRUE&b=False', { boolean: true })).toEqual({ a: true, b: false })
     expect(getUrlParams('?flag=', { boolean: true })).toEqual({ flag: '' })
   })

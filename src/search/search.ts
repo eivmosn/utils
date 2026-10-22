@@ -46,7 +46,7 @@ export function searchList<T extends Record<string, any>>(
       if (options.caseSensitive ? !content.includes(needle) : !content.toLowerCase().includes(needle)) {
         continue
       }
-      (matchedFields ??= []).push(field)
+      ;(matchedFields ??= []).push(field)
       text ||= content
     }
 

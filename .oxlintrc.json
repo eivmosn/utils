@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn",
+    "pedantic": "off",
+    "style": "off",
+    "restriction": "off",
+    "nursery": "off"
+  },
+  "env": {
+    "builtin": true,
+    "node": true
+  },
+  "ignorePatterns": ["dist/**", "node_modules/**", ".cache/**", ".pnpm-store/**"],
+  "rules": {
+    "eslint/no-console": "off",
+    "eslint/no-underscore-dangle": "off",
+    "typescript/ban-ts-comment": "off",
+    "unicorn/new-for-builtins": "off",
+    "unicorn/no-array-reverse": "off",
+    "typescript/consistent-type-definitions": ["error", "interface"],
+    "eslint/sort-imports": ["error", { "ignoreDeclarationSort": true, "ignoreCase": true }]
+  }
+}

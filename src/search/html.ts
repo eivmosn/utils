@@ -8,7 +8,7 @@ const ESCAPE_MAP: Record<string, string> = {
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
-  '\'': '&#39;',
+  "'": '&#39;',
 }
 
 /**
@@ -33,11 +33,7 @@ export function escapeHtml(text: string): string {
  * <span v-html="highlight(r.text, keyword)" />
  * ```
  */
-export function highlight(
-  text: string,
-  keyword: string,
-  options: HighlightOptions = {},
-): string {
+export function highlight(text: string, keyword: string, options: HighlightOptions = {}): string {
   const esc = options.escape === false ? (value: string) => value : escapeHtml
   const pattern = keyword.trim()
   if (!text || !pattern) {
@@ -46,15 +42,9 @@ export function highlight(
   return wrap(text, pattern, options, esc)
 }
 
-function wrap(
-  text: string,
-  pattern: string,
-  options: HighlightOptions,
-  esc: (text: string) => string,
-): string {
+function wrap(text: string, pattern: string, options: HighlightOptions, esc: (text: string) => string): string {
   const style = options.style ?? HIGHLIGHT_STYLE
-  const attrs = (options.class ? ` class="${esc(options.class)}"` : '')
-    + (style ? ` style="${esc(style)}"` : '')
+  const attrs = (options.class ? ` class="${esc(options.class)}"` : '') + (style ? ` style="${esc(style)}"` : '')
   const open = `<span${attrs}>`
   const close = '</span>'
 

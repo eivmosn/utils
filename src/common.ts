@@ -36,12 +36,10 @@ export function set<T extends object>(source: T, path: string, value: any) {
   const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.')
   const lastKey = keys.pop()
   const target = keys.reduce((obj, key) => {
-    if (!Object.hasOwn(Object(obj), key))
-      Object(obj)[key] = {}
+    if (!Object.hasOwn(Object(obj), key)) Object(obj)[key] = {}
     return Object(obj)[key]
   }, source)
-  if (lastKey)
-    target[lastKey as keyof T] = value
+  if (lastKey) target[lastKey as keyof T] = value
 }
 
 /**
@@ -101,8 +99,7 @@ export function toArray<T>(val: T) {
   if (val === undefined || val === null) {
     return []
   }
-  if (Array.isArray(val))
-    return val
+  if (Array.isArray(val)) return val
   return [val]
 }
 
@@ -182,11 +179,14 @@ interface TreeNode<T> {
  * )
  * // [{ id: 1, pid: null, children: [{ id: 2, pid: 1, children: [] }] }]
  */
-export function toTree<T>(arr: T[], options: {
-  key: string
-  parent: string
-  children: string
-}): TreeNode<T>[] {
+export function toTree<T>(
+  arr: T[],
+  options: {
+    key: string
+    parent: string
+    children: string
+  },
+): TreeNode<T>[] {
   const { key, parent, children } = options
   const nodes = new Map<any, TreeNode<T>>()
   const tree: TreeNode<T>[] = []
@@ -198,8 +198,7 @@ export function toTree<T>(arr: T[], options: {
     if (node === undefined) {
       node = { ...item, [children]: [] } as TreeNode<T>
       nodes.set(id, node)
-    }
-    else {
+    } else {
       // 作为父节点被提前引用的占位节点：补齐字段，但保留已挂载的子节点
       const mounted = node[children]
       Object.assign(node, item)
@@ -209,14 +208,13 @@ export function toTree<T>(arr: T[], options: {
     const parentKey = item[parent as keyof T]
     if (parentKey === undefined || parentKey === null || parentKey === '') {
       tree.push(node)
-    }
-    else {
+    } else {
       let parentNode = nodes.get(parentKey)
       if (parentNode === undefined) {
         parentNode = { [key]: parentKey, [children]: [] } as TreeNode<T>
         nodes.set(parentKey, parentNode)
       }
-      (parentNode[children] as TreeNode<T>[]).push(node)
+      ;(parentNode[children] as TreeNode<T>[]).push(node)
     }
   }
 
@@ -280,12 +278,10 @@ export function findNode<T>(
 
 // 解码：`+` 视为空格，`%xx` 解码；非法编码原样返回，不抛错
 function decodeParam(value: string): string {
-  if (!value)
-    return ''
+  if (!value) return ''
   try {
     return decodeURIComponent(value.replace(/\+/g, ' '))
-  }
-  catch {
+  } catch {
     return value
   }
 }
@@ -294,10 +290,8 @@ function decodeParam(value: string): string {
 function toParamValue(value: string, useBoolean: boolean): string | boolean {
   if (useBoolean) {
     const lower = value.toLowerCase()
-    if (lower === 'true')
-      return true
-    if (lower === 'false')
-      return false
+    if (lower === 'true') return true
+    if (lower === 'false') return false
   }
   return value
 }

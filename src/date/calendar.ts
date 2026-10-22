@@ -95,7 +95,7 @@ function festivalRank(marker: { tag?: string[] }): number {
   return index === -1 ? TAG_PRIORITY.length : index
 }
 
-function collectFestivals(markers: { name: string, tag?: string[] }[]): string[] {
+function collectFestivals(markers: { name: string; tag?: string[] }[]): string[] {
   if (markers.length === 0) {
     return []
   }
@@ -112,7 +112,7 @@ function collectFestivals(markers: { name: string, tag?: string[] }[]): string[]
 // 补足 festivals.zh-cn 缺失的传统节日，结果排在数据源节日之前
 function deriveTraditionalFestivals(
   lunarDate: LunarDate,
-  options: { solarTerm?: string, isLunarYearEve?: boolean } = {},
+  options: { solarTerm?: string; isLunarYearEve?: boolean } = {},
 ): string[] {
   const { month, day, isLeapMonth } = lunarDate
   const { solarTerm, isLunarYearEve } = options
@@ -183,15 +183,13 @@ function createCalendarDay(
   const solarTerm = solarTermMap[fullDate]
 
   // 腊月最后一天即次日为正月初一；不能写成 day >= 29，否则大月的廿九会误判
-  const nextLunar = (lunisolar(formatDate(date.add(1, 'day'))).lunar) as unknown as LunarLike
-  const isLunarYearEve = !lunarDate.isLeapMonth
-    && lunarDate.month === 12
-    && nextLunar.month === 1
-    && nextLunar.day === 1
+  const nextLunar = lunisolar(formatDate(date.add(1, 'day'))).lunar as unknown as LunarLike
+  const isLunarYearEve =
+    !lunarDate.isLeapMonth && lunarDate.month === 12 && nextLunar.month === 1 && nextLunar.day === 1
 
   const holidays = [
     ...deriveTraditionalFestivals(lunarDate, { solarTerm, isLunarYearEve }),
-    ...collectFestivals(solar.markers.list as { name: string, tag?: string[] }[]),
+    ...collectFestivals(solar.markers.list as { name: string; tag?: string[] }[]),
   ]
 
   return {
@@ -266,9 +264,7 @@ export class Calendar {
    * new Calendar({ weekStart: 1 }).getWeekOrder()       // [1,2,3,4,5,6,0]
    */
   getWeekOrder(options?: CalendarQueryOptions): WeekStart[] {
-    const weekStart = options?.weekStart === undefined
-      ? this.weekStart
-      : normalizeWeekStart(options.weekStart)
+    const weekStart = options?.weekStart === undefined ? this.weekStart : normalizeWeekStart(options.weekStart)
     return Array.from({ length: 7 }, (_, i) => ((weekStart + i) % 7) as WeekStart)
   }
 
@@ -278,9 +274,7 @@ export class Calendar {
    * `options` 仅覆盖本次调用，不改变实例状态。
    */
   getCalendarData(options?: CalendarQueryOptions): CalendarDay[][] {
-    const weekStart = options?.weekStart === undefined
-      ? this.weekStart
-      : normalizeWeekStart(options.weekStart)
+    const weekStart = options?.weekStart === undefined ? this.weekStart : normalizeWeekStart(options.weekStart)
     const year = this.currentDate.year()
     const month = this.currentDate.month()
 

@@ -23,9 +23,13 @@
   ],
   "scripts": {
     "test": "vitest",
-    "typecheck": "vue-tsc -p tsconfig.test.json --noEmit",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
     "build": "tsdown",
-    "dev": "tsx src/index.ts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "check": "oxlint && oxfmt --check",
     "hooks": "simple-git-hooks",
     "prepublishOnly": "pnpm build"
   },
@@ -44,23 +48,20 @@
     "nanoid": "^6.0.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^9.5.1",
-    "@types/node": "^25.9.8",
-    "eslint": "^10.11.0",
     "nano-staged": "^1.0.2",
+    "oxfmt": "0.74.0",
+    "oxlint": "1.89.0",
     "simple-git-hooks": "^2.14.0",
     "tsdown": "^0.23.1",
-    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
-    "unplugin-vue": "^7.2.0",
     "vitest": "^4.1.11",
-    "vue": "^3.5.43",
-    "vue-tsc": "^3.2.0"
+    "vue": "^3.5.43"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged"
   },
   "nano-staged": {
-    "*.ts": "eslint --fix"
+    "*.{ts,mts,cts,js,mjs,cjs}": "oxlint --fix",
+    "*.{ts,mts,cts,js,mjs,cjs,json,md,yml,yaml}": "oxfmt"
   }
 }

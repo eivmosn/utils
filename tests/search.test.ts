@@ -47,30 +47,30 @@ describe('searchList', () => {
 
 describe('highlight', () => {
   it('命中字符包 span，默认内联红', () => {
-    expect(highlight('测试应用', '测试'))
-      .toBe('<span style="color:#f5222d;font-weight:600">测试</span>应用')
+    expect(highlight('测试应用', '测试')).toBe('<span style="color:#f5222d;font-weight:600">测试</span>应用')
   })
 
   it('多次命中全部高亮', () => {
-    expect(highlight('测试a测试', '测试'))
-      .toBe('<span style="color:#f5222d;font-weight:600">测试</span>a<span style="color:#f5222d;font-weight:600">测试</span>')
+    expect(highlight('测试a测试', '测试')).toBe(
+      '<span style="color:#f5222d;font-weight:600">测试</span>a<span style="color:#f5222d;font-weight:600">测试</span>',
+    )
   })
 
   it('忽略大小写，但高亮的是原文', () => {
-    expect(highlight('Application', 'app'))
-      .toBe('<span style="color:#f5222d;font-weight:600">App</span>lication')
+    expect(highlight('Application', 'app')).toBe('<span style="color:#f5222d;font-weight:600">App</span>lication')
   })
 
   it('自定义样式与 class', () => {
-    expect(highlight('测试应用', '测试', { style: 'color:#1677ff' }))
-      .toBe('<span style="color:#1677ff">测试</span>应用')
-    expect(highlight('测试应用', '测试', { style: '', class: 'hl' }))
-      .toBe('<span class="hl">测试</span>应用')
+    expect(highlight('测试应用', '测试', { style: 'color:#1677ff' })).toBe(
+      '<span style="color:#1677ff">测试</span>应用',
+    )
+    expect(highlight('测试应用', '测试', { style: '', class: 'hl' })).toBe('<span class="hl">测试</span>应用')
   })
 
   it('默认转义，防注入', () => {
-    expect(highlight('<img src=x onerror=alert(1)>', 'img'))
-      .toBe('&lt;<span style="color:#f5222d;font-weight:600">img</span> src=x onerror=alert(1)&gt;')
+    expect(highlight('<img src=x onerror=alert(1)>', 'img')).toBe(
+      '&lt;<span style="color:#f5222d;font-weight:600">img</span> src=x onerror=alert(1)&gt;',
+    )
   })
 
   it('未命中/空文本返回转义后的原文', () => {
@@ -80,8 +80,7 @@ describe('highlight', () => {
   })
 
   it('emoji 不会被切开', () => {
-    expect(highlight('中文😀emoji', '😀'))
-      .toBe('中文<span style="color:#f5222d;font-weight:600">😀</span>emoji')
+    expect(highlight('中文😀emoji', '😀')).toBe('中文<span style="color:#f5222d;font-weight:600">😀</span>emoji')
   })
 
   it('escapeHtml 覆盖危险字符', () => {

@@ -38,8 +38,11 @@ function getGenerator(alphabet: string) {
  * createId({ alphabet: '01' })            // 自定义字符集
  */
 export function createId(options: number | CreateIdOptions = {}): string {
-  const { size = DEFAULT_SIZE, alphabet, specialChars = false }
-    = typeof options === 'number' ? { size: options } : options
+  const {
+    size = DEFAULT_SIZE,
+    alphabet,
+    specialChars = false,
+  } = typeof options === 'number' ? { size: options } : options
 
   if (alphabet) {
     return getGenerator(alphabet)(size)
